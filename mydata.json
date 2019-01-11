@@ -1,0 +1,33 @@
+{
+	"carousel": [{
+			"_id": 1,
+			"musicid": "1336999217",
+			"albumid": "75023784",
+			"img": "http://p1.music.126.net/nbN3MfDHUOAXMFnXLyhcVQ==/109951163783924088.jpg"
+		},
+		{
+			"_id": 2,
+			"musicid": "1338268110",
+			"albumid": "75087698",
+			"img": "http://p1.music.126.net/rRhGx-8RbAWkckrA-EOQsA==/109951163783892653.jpg"
+		},
+		{
+			"_id": 3,
+			"musicid": "1337954814",
+			"albumid": "75072509",
+			"img": "http://p1.music.126.net/LRPhqNVkh3tCYyf1wvl79A==/109951163783897465.jpg"
+		},
+		{
+			"_id": 4,
+			"musicid": "1337918800",
+			"albumid": "75070961",
+			"img": "http://p1.music.126.net/JclDDPpWroJ-TcXgvbA2yQ==/109951163783034906.jpg"
+		},
+		{
+			"_id": 5,
+			"musicid": "1338149101",
+			"albumid": "75082998",
+			"img": "http://p1.music.126.net/hIAcuORkVYVJCmHJhpDr4A==/109951163783925262.jpg"
+		}
+	]
+}

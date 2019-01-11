@@ -3,7 +3,7 @@ import 'muse-ui/dist/muse-ui.css'
 import 'muse-ui/lib/styles/base.less'
 import {
 	AppBar, //顶部导航条
-	Avatar,
+	Avatar, //原型图标
 	Badge,
 	Button, //按钮
 	BottomNav,

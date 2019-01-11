@@ -1,26 +1,38 @@
 <template>
 	<div id="app">
 		<loading v-if="isAjax"></loading>
-		<router-view v-else/>
-		<set-drawer></set-drawer>
+		<div class="main-view" v-else>
+			<router-view/>
+			<div class="set-space"></div>
+			<bottom-music-player></bottom-music-player>
+			<set-drawer></set-drawer>
+		</div>
 	</div>
 </template>
 <script>
 	import Loading from './views/Loading.vue'
 	import SetDrawer from './components/DiscoveryMusic/SetDrawer.vue'
-	import {mapState} from 'vuex'
+	import BottomMusicPlayer from './components/BottomMusicPlayer.vue'
+	import {mapState,mapGetters,mapActions} from 'vuex'
 	export default {
 		name: 'App',
 		components: {
 			Loading,
-			SetDrawer
+			SetDrawer,
+			BottomMusicPlayer
 		},
 		computed: {
-			...mapState(['isAjax'])
+			...mapState(['isAjax']),
+			...mapGetters({
+				recommdList: 'recommdList'
+			})
+		},
+		methods: {
+			...mapActions(['getDiscoveryData'])
 		}
 	}
 </script>
-<style>
+<style lang="less">
 	html,
 	body {
 		height: 100%;
@@ -29,5 +41,10 @@
 
 	#app {
 		height: 100%;
+		
+		.set-space{
+			height: 44px;
+			width: 100%;
+		}
 	}
 </style>

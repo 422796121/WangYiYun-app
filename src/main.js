@@ -26,6 +26,6 @@ new Vue({
 	render: h => h(App)
 }).$mount('#app')
 
-store.dispatch('getAllData', axios)
+store.dispatch('getDiscoveryData', axios)
 
 router.push('/discover/stylerecommd')
