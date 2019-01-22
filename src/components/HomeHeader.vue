@@ -30,10 +30,9 @@
 		mapActions
 	} from 'vuex'
 	export default {
-		name: 'DiscoveryHeader',
+		name: 'HomeHeader',
 		data() {
-			return {
-			}
+			return {}
 		},
 		computed: {
 			...mapState(['leftOpen'])
@@ -52,6 +51,7 @@
 		position: fixed;
 		top: 0;
 		left: 0;
+		right: 0;
 		width: 100%;
 		z-index: 999;
 
@@ -59,6 +59,7 @@
 			height: 56px;
 
 			.mu-appbar {
+				box-shadow: none !important;
 				.header-btn {
 					margin: 0 auto;
 					display: flex;
@@ -81,17 +82,17 @@
 						}
 
 						.music-icon {
-							background: url(../../../public/images/top_music.png) center center no-repeat;
+							background: url(../../public/images/top_music.png) center center no-repeat;
 							background-size: 56px;
 						}
 
 						.logo-icon {
-							background: url(../../../public/images/loadlogo.png) center center no-repeat;
+							background: url(../../public/images/loadlogo.png) center center no-repeat;
 							background-size: 56px;
 						}
 
 						.video-icon {
-							background: url(../../../public/images/top_video.png) center center no-repeat;
+							background: url(../../public/images/top_video.png) center center no-repeat;
 							background-size: 56px;
 						}
 					}

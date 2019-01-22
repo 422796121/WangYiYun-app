@@ -1,49 +1,81 @@
 <template>
-	<div class="descovery-view" ref="descovery">
-		<ul>
-			<li class="descovery-top">
-				<DiscoveryHeader></DiscoveryHeader>
-				<div class="link-wrapper">
-					<mu-button flat @click="toDiscover('stylerecommd',0)">
-						<span class="top-link" :class="linknum == 0 ? 'active' : ''">推荐</span>
-					</mu-button>
-					<mu-button flat @click="toDiscover('songsheet',1)">
-						<span class="top-link" :class="linknum == 1 ? 'active' : ''">朋友</span>
-					</mu-button>
-					<mu-button flat @click="toDiscover('anchorstation',2)">
-						<span class="top-link" :class="linknum == 2 ? 'active' : ''">电台</span>
-					</mu-button>
-				</div>
-			</li>
-			<li class="descovery-content">
-				<div class="bg"></div>
-				<carousel></carousel>
-				<router-view></router-view>
-			</li>
-		</ul>
+	<div class="descovery-view">
+		<div class="descovery-top">
+			<home-header></home-header>
+			<div class="link-wrapper">
+				<mu-button flat>
+					<router-link to="/discover/stylerecommd" tag="span" class="top-link">推荐</router-link>
+				</mu-button>
+				<mu-button flat>
+					<router-link to="/discover/friends" tag="span" class="top-link">朋友</router-link>
+				</mu-button>
+				<mu-button flat>
+					<router-link to="/discover/radio" tag="span" class="top-link">电台</router-link>
+				</mu-button>
+			</div>
+		</div>
+		<div class="descovery-content">
+			<div class="use-space"></div>
+			<pull-up-load v-show="isAjax"></pull-up-load>
+			<div class="descovery-router" ref="descovery">
+				<ul>
+					<li>
+						<keep-alive>
+							<router-view></router-view>
+						</keep-alive>
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-	import DiscoveryHeader from '../components/DiscoveryMusic/DiscoveryHeader.vue'
-	import Carousel from '../components/Carousel.vue'
+	import HomeHeader from '../components/HomeHeader.vue'
+	import PullUpLoad from '../components/PullUpLoad.vue'
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
 	export default {
 		name: 'DiscoveryMusicView',
 		components: {
-			DiscoveryHeader,
-			Carousel
+			HomeHeader,
+			PullUpLoad
 		},
 		data() {
 			return {
 				discoveryScroll: null,
-				linknum: 0
+				leave: false
 			}
 		},
+		computed: {
+			...mapState(['isAjax', 'scroll'])
+		},
 		methods: {
-			toDiscover(path, num) {
-				this.linknum = num
-				this.$router.push(`/discover/${path}`)
+			...mapActions(['setScroll', 'reGetDiscoveryData', 'getRadioData', 'refreshScroll', 'clearScroll']),
+			setScrollComponent() {
+				if (this.discoveryScroll === null) {
+					this.setScroll({
+						name: 'discovery',
+						scroll: this.discoveryScroll,
+						ref: this.$refs.descovery
+					})
+					this.discoveryScroll = this.scroll['discovery']
+				} else {
+					this.refreshScroll(this.scroll['discovery'])
+				}
+				if (this.scroll['discovery'] !== null) {
+					this.scroll['discovery'].on('pullingDown', () => {
+						this.reGetDiscoveryData(this.axios)
+						this.getRadioData(this.axios)
+						this.scroll['discovery'].finishPullDown()
+					})
+				}
 			}
+		},
+		updated() {
+			this.setScrollComponent()
 		}
 	}
 </script>
@@ -51,12 +83,15 @@
 <style lang="less" scoped="scoped">
 	@light-theme-bg: #d23023;
 	@light-theme-font: #faf6f5;
-	
+
 	.descovery-view {
 		height: 100%;
+		width: 100%;
 
 		.descovery-top {
 			height: 81px;
+			width: 100%;
+
 			.link-wrapper {
 				position: fixed;
 				top: 45px;
@@ -86,18 +121,17 @@
 		}
 
 		.descovery-content {
+			display: inline-block;
 			position: relative;
-			padding-top: 10px;
+			height: 100%;
+			width: 100%;
 
-			.bg {
-				position: absolute;
-				top: 0;
-				left: 0;
-				height: 120px;
-				width: 100%;
-				background: #d23023;
+			// 			.use-space{
+			// 				height: 50px;
+			// 			}
+			.descovery-router {
+				height: 100%;
 			}
 		}
-
 	}
 </style>

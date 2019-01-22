@@ -72,6 +72,62 @@ module.exports = {
 							})
 						})
 				}),
+				//电台
+				//电台分类
+				app.get('/api/typeradio', (req, res) => {
+					ajax.post('http://localhost:3000/dj/catelist')
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								data: data.text
+							})
+						})
+				}),
+				//电台推荐
+				app.get('/api/recommdradio', (req, res) => {
+					ajax.post('http://localhost:3000/dj/recommend')
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								data: data.text
+							})
+						})
+				}),
+				//电台各个分类列表
+				app.get('/api/typeradio/type', (req, res) => {
+					let type = req.query.type
+					let timestamp = req.query.timestamp
+					ajax.get(`http://localhost:3000/dj/recommend/type?type=${type}&timestamp=${timestamp}`)
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								data: data.text
+							})
+						})
+				}),
+
+				//歌词
+				app.get('/api/lyric', (req, res) => {
+					let id = req.query.musicid
+					ajax.post('http://localhost:3000/lyric')
+						.send({
+							id
+						})
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								data: data.text
+							})
+						})
+				}),
 				//搜索
 				app.get('/api/search', (req, res) => {
 					let keywords = req.query.keywords
@@ -81,7 +137,7 @@ module.exports = {
 						})
 						.end((err, data) => {
 							if (err) {
-								// console.log(err)
+								console.log(err)
 							}
 							res.json({
 								data: data.text

@@ -27,11 +27,12 @@
 		position: relative;
 		height: 100%;
 		width: 100%;
-		background-color: RGB(207, 50, 50);
+		background: url(../../public/images/load_bg.png) center center no-repeat;
+		background-size: cover;
 
 		.loading-wrapper {
 			position: absolute;
-			top: 55%;
+			top: 58%;
 			left: 0;
 			height: 60%;
 			transform: translateY(-50%);

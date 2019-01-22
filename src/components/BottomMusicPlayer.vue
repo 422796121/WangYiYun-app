@@ -1,6 +1,6 @@
 <template>
 	<div class="bottom-music-player">
-		<audio src="https://music.163.com/song/media/outer/url?id=33894312.mp3" ref="player"></audio>
+		<audio src="https://music.163.com/song/media/outer/url?id=556042458.mp3" ref="player"></audio>
 		<div class="time-progress">
 			<div class="time" ref="timeShow"></div>
 		</div>
@@ -9,9 +9,9 @@
 				<img src="https://p2.music.126.net/QHw-RuMwfQkmgtiyRpGs0Q==/102254581395219.jpg" alt="">
 			</div>
 			<div class="content">
-				<div class="title">sefd</div>
-				<div class="lyric" v-if="playState">sdf</div>
-				<div class="author" v-else>123</div>
+				<div class="title">{{currentTime}}</div>
+				<div class="author" v-if="lyric==null">asd</div>
+				<div class="lyric" v-else>{{lyric}}</div>
 			</div>
 			<div class="btn-box">
 				<span class="play-btn" :class="playState ? 'hasplay' : ''" @click="playMusic"></span>
@@ -22,48 +22,46 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapGetters,
+		mapActions
+	} from 'vuex'
 	export default {
 		name: 'BottomMusicPlayer',
 		data() {
-			return {
-				playState: false,
-				duration: 0
-			}
+			return {}
 		},
-		mounted() {
+		computed: {
+			...mapState(['isAjax']),
+			...mapGetters(['playState', 'lyric', 'currentTime'])
+		},
+		created() {
 			this.$nextTick(() => {
 				let player = this.$refs.player
-				player.addEventListener('loadedmetadata', () => {
-					this.duration = player.duration
-					this.setTimeProgress(player.currentTime)
+				this.getPlayerData({
+					ele: player,
+					axios: this.axios,
+					musicid: '556042458'
 				})
 			})
 
 		},
 		methods: {
+			...mapActions(['getPlayerData', 'setMusicPlayer']),
 			playMusic() {
 				let player = this.$refs.player
-				console.log(player.duration)
-				if (this.playState === false) {
-					player.play()
-					this.playState = true
-				} else {
-					player.pause()
-					this.playState = false
-				}
-				player.addEventListener('timeupdate', () => {
-					this.setTimeProgress(player.currentTime)
+				let show = this.$refs.timeShow
+				this.setMusicPlayer({
+					player,
+					show
 				})
-			},
-			setTimeProgress(current) {
-				let progress = (current / this.duration) * 100.0
-				this.$refs.timeShow.style.width = `${progress}%`
 			}
 		}
 	}
 </script>
 
-<style lang="less" scoped="scoped">
+<style lang="less">
 	.bottom-music-player {
 		position: fixed;
 		bottom: 0;
@@ -71,7 +69,7 @@
 		right: 0;
 		height: 44px;
 		width: 100%;
-		// border-top: 1px solid #f2f2f2;
+		z-index: 999;
 		background: rgba(255, 255, 255, .9);
 
 		.time-progress {
@@ -112,7 +110,8 @@
 					font-weight: 500;
 				}
 
-				.lyric,.author {
+				.author,
+				.lyric {
 					height: 17px;
 					line-height: 17px;
 					font-size: 12px;

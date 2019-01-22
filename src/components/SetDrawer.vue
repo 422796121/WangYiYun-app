@@ -17,7 +17,7 @@
 					<span>手机电脑多端同步，尽享海量高品质音乐</span>
 				</div>
 				<div class="btn">
-					<mu-button round color="primary">Primary</mu-button>
+					<mu-button round small>立即登录</mu-button>
 				</div>
 			</div>
 			<mu-list>
@@ -84,10 +84,14 @@
 
 <style lang="less" scoped="scoped">
 	.header-unlogin{
+		background: url(../../public/images/left-bg.png) center center no-repeat;
+		background-size: cover;
+		padding-bottom: 28px;
 		.content{
 			padding-top: 30%;
 			transform: translateY(-50%);
 			height: 50px;
+			color: rgba(255,255,255,0.8);
 			&>span{
 				padding: 3px 0;
 				display: inline-block;
@@ -97,15 +101,23 @@
 			}
 		}
 		.btn{
-			padding-top: 10px;
-			height: 50px;
+			margin-top: 30px;
+			height: 40px;
 			width: 100%;
 			.mu-button{
 				margin-left: 50%;
+				padding: 0 10px;
 				transform: translateX(-50%);
+				width: 150px;
+				border: .5px solid rgba(255,255,255,0.8);
+				background: transparent;
+				color: #fff;
 			}
 		}
 		
+	}
+	.mu-list{
+			font-size: 16px;
 	}
 	.set-list .mu-item-action {
         min-width: 35px;

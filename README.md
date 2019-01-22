@@ -38,6 +38,7 @@ $ npm install better-scroll --save
 ```
 $ npm install muse-ui --save
 $ npm install babel-plugin-import less less-loader --save-dev
+$ npm install muse-ui-loading  -save
 ```
 
 

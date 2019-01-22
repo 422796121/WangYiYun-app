@@ -1,5 +1,7 @@
 <template>
 	<div class="style-recommend-view">
+		<div class="bg"></div>
+		<carousel></carousel>
 		<div class="btn-wrapper">
 			<div class="btn-box">
 				<mu-avatar :size="45">
@@ -102,18 +104,22 @@
 				</div>
 			</div>
 		</div>
-		
+
 
 	</div>
 </template>
 
 <script>
+	import Carousel from '../../components/Carousel.vue'
 	import {
 		mapGetters,
 		mapActions
 	} from 'vuex'
 	export default {
 		name: 'StyleRecommend',
+		components: {
+			Carousel
+		},
 		data() {
 			return {}
 		},
@@ -127,7 +133,7 @@
 			})
 		},
 		methods: {
-			...mapActions(['setLfetOpen', 'getMusicDetail'])
+			...mapActions(['setLfetOpen'])
 		},
 		mounted() {
 
@@ -143,6 +149,19 @@
 
 	.style-recommend-view {
 		width: 100%;
+		position: relative;
+		padding-top: 5px;
+		padding-bottom: 130px;
+
+		.bg {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100px;
+			width: 100%;
+			background: #d23023;
+		}
+
 
 		.btn-wrapper {
 			display: flex;
@@ -173,7 +192,7 @@
 		.exclusive-list,
 		.newmusic-list,
 		.newmv-list,
-		.radio-list{
+		.radio-list {
 			width: 100%;
 
 			.name {
@@ -212,6 +231,7 @@
 						&>img {
 							height: 95%;
 							width: 95%;
+							border-radius: 5px;
 						}
 					}
 
@@ -224,20 +244,15 @@
 						font-size: 12px;
 						text-align: left;
 						color: @light-theme-font-black;
-						&>span{
-							display: block;
-							width: 100%;
-							display: -webkit-box;
-							-webkit-box-orient: vertical;
-							-webkit-line-clamp: 1;
-							overflow: hidden;
-							&:first-child{
-								// font-weight: bold;
-								color: #000;
-							}
-						}
-						.author{
+						display: -webkit-box;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp: 3;
+						overflow: hidden;
+
+						.author {
 							padding-top: 3px;
+							font-size: 15px;
+							text-align: left;
 						}
 					}
 				}
@@ -275,11 +290,12 @@
 		}
 
 		//新mv
-		.newmv-list{
+		.newmv-list {
 			.content {
 				.content-item {
 					flex: 0 0 50%;
 					width: 50%;
+
 					.content-img {
 						&>img {
 							height: 100%;
@@ -289,7 +305,7 @@
 				}
 			}
 		}
-		
+
 
 	}
 </style>

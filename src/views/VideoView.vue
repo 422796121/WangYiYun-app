@@ -2,7 +2,7 @@
 	<div class="descovery-view" ref="descovery">
 		<ul>
 			<li>
-				<DiscoveryHeader></DiscoveryHeader>
+				<home-header></home-header>
 			</li>
 			<li>
 				<router-view></router-view>
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-	import DiscoveryHeader from '../components/DiscoveryMusic/DiscoveryHeader.vue'
+	import HomeHeader from '../components/HomeHeader.vue'
 	import {mapState} from 'vuex'
 	export default {
 		name: 'VideoView',
 		components: {
-			DiscoveryHeader
+			HomeHeader
 		},
 		data() {
 			return {
@@ -26,10 +26,6 @@
 		},
 		mounted() {
 			this.$nextTick(() => {
-				this.$store.commit('SET_SCROLL', {
-					discoveryScroll: this.discoveryScroll,
-					descovery: this.$refs.descovery
-				})
 			})
 		},
 		computed: {

@@ -13,11 +13,18 @@ export default new Router({
 	routes: [{
 			path: '/mymusicview',
 			name: 'mymusicview',
-			component: MyMusicView
+			redirect: '/mymusicview/mine',
+			component: MyMusicView,
+			children: [{
+				path: 'mine',
+				name: 'mine',
+				component: () => import('../views/MyMusic/MyMusic.vue')
+			}]
 		},
 		{
 			path: '/discover',
 			name: 'discover',
+			redirect: '/discover/stylerecommd',
 			component: DiscoveryMusic,
 			children: [{
 					path: 'stylerecommd',
@@ -38,6 +45,16 @@ export default new Router({
 					path: 'rankings',
 					name: 'rankings',
 					component: () => import('../views/DiscoveryMusic/Rankings.vue')
+				},
+				// 				{
+				// 					path: 'friends',
+				// 					name: 'friends',
+				// 					component: () => import('../views/DiscoveryMusic/Rankings.vue')
+				// 				},
+				{
+					path: 'radio',
+					name: 'radio',
+					component: () => import('../views/DiscoveryMusic/RadioView.vue')
 				}
 			]
 		},
@@ -45,6 +62,16 @@ export default new Router({
 			path: '/videoview',
 			name: 'videoview',
 			component: VideoView
+		},
+		{
+			path: '/account',
+			name: 'account',
+			component: () => import ('../views/AccountView.vue')
+		},
+		{
+			path: '/account/:type',
+			name: 'accounttype',
+			component: () => import ('../views/Account/LoginOrRegister.vue')
 		}
 	]
 })

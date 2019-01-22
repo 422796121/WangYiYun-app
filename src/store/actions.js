@@ -2,31 +2,67 @@ import * as types from './mutation-types'
 // import qs from 'qs'
 
 export default {
-	//获取Discovery数据
-	async getDiscoveryData({
+
+	// 播放器
+	//是否显示底部播放器
+	setBottonPlayer({
 		commit
-	}, axios) {
+	}, bool) {
+		commit(types.SHOW_BOTTOM_PLAYER, bool)
+	},
+	//获取音乐播放器音乐时长
+	async getPlayerData({
+		commit
+	}, {
+		ele,
+		axios,
+		musicid
+	}) {
+		commit(types.GET_PLAYER_DATA, ele)
+
 		commit(types.REFRESH_AJAX, true)
-		let carousel = await axios.get('/api/carousel')
-		carousel = carousel.data.data
-		commit(types.RECEIVE_DATA, {
-			carousel
+		await this.dispatch('getLyricList', {
+			axios,
+			musicid
 		})
-		await this.dispatch('getRecommdList', axios)
-
-		await this.dispatch('getExclusiveList', axios)
-		
-		await this.dispatch('getNewMusicList', axios)
-		
-		await this.dispatch('getMVList', axios)
-		
-		await this.dispatch('getRadioList', axios)
-
 		commit(types.REFRESH_AJAX, false)
 	},
-
-
-
+	//音乐播放器
+	setMusicPlayer({
+		commit
+	}, eles) {
+		commit(types.SET_MUSIC_PLAYER, eles)
+	},
+	//播放器进度条
+	setTimeProgess({
+		commit
+	}, data) {
+		commit(types.SET_TIME_PROGESS, data)
+	},
+	//获取歌词数据
+	getLyricList({
+		commit
+	}, {
+		axios,
+		musicid
+	}) {
+		return new Promise(resolve => {
+			axios.get('/api/lyric', {
+					params: {
+						musicid
+					}
+				})
+				.then(res => {
+					let data = JSON.parse(res.data.data)
+					commit('GET_LYRIC_DATA', {
+						musicid,
+						data
+					})
+					resolve()
+					commit('PROCESSING_LYRIC_DATA')
+				})
+		})
+	},
 
 
 	//歌曲详情 音乐id
@@ -68,7 +104,32 @@ export default {
 		commit
 	}, ele) {
 		commit(types.PLEY_SLIDE, ele)
+	},
+
+	//滑动插件
+	setScroll({
+		commit
+	}, {
+		name,
+		scroll,
+		ref
+	}) {
+		commit(types.SET_SCROLL, {
+			name,
+			scroll,
+			ref
+		})
+	},
+	//更新滑动插件
+	refreshScroll({
+		commit
+	}, scroll) {
+		commit(types.REFRESH_SCROLL, scroll)
+	},
+	//清除滑动
+	clearScroll({
+		commit
+	}) {
+		commit(types.CLEAR_SCROLL)
 	}
-
-
 }
