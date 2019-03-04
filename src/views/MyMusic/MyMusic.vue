@@ -1,102 +1,159 @@
 <template>
-	<div class="my-music-view">
-		<div class="bg"></div>
-		<div class="unlogin-wrapper">
-			<div>
-				<mu-avatar size="32" @click="toLogin">
-					<img src="../../../public/images/b8i.png" width="40" height="40">
-				</mu-avatar>
-				<div class="content" @click="toLogin">
-					<span>未登录</span>
-				</div>
-				<div class="btn">
-					<mu-button round>开通会员</mu-button>
-				</div>
-			</div>
-		</div>
-		<div class="my-music-wrapper">
-			<div class="column">
-				<div class="local-music">
-					<i></i>
-					<span>本地音乐<em class="count">(0)</em></span>
-				</div>
-				<div class="recent-play">
-					<i></i>
-					<span>最近播放<em class="count">(0)</em></span>
-				</div>
-				<div class="download">
-					<i></i>
-					<span>下载管理<em class="count">(0)</em></span>
-				</div>
-				<div class="my-radio">
-					<i></i>
-					<span>我的电台<em class="count">(0)</em></span>
-				</div>
-				<div class="my-collect">
-					<i></i>
-					<span>我的收藏<em class="count">(0)</em></span>
-				</div>
-			</div>
-			<div class="song-sheet">
-				<div class="song-sheet-wrapper">
-					<div class="header" @click="songSheet = !songSheet">
-						<i class="up-icon" :class="songSheet?'':'down-icon'"></i>
-						<span>创建的歌单(1)</span>
-						<i class="config"></i>
+	<div class="my-music-view" v-show="!isAjax">
+
+		<v-touch v-on:swipeleft="swiperleft">
+			<div class="bg"></div>
+			<div class="unlogin-wrapper">
+				<div>
+					<mu-avatar size="32" @click="toLogin" v-if="!loginUserStatus">
+						<img src="../../../public/images/b8i.png" width="40" height="40">
+					</mu-avatar>
+					<mu-avatar size="32" @click="toLogin" v-else>
+						<img :src="userDetail.profile.avatarUrl" width="40" height="40">
+					</mu-avatar>
+					<div class="content" @click="toLogin" v-if="!loginUserStatus">
+						<span>未登录</span>
 					</div>
-					<div class="content" v-show="songSheet">
-						<div class="song-sheet-item">
+					<div class="content" v-else>
+						<span>{{userDetail.profile.nickname}}</span>
+					</div>
+					<div class="btn">
+						<mu-button round>签到</mu-button>
+					</div>
+				</div>
+			</div>
+			<div class="my-music-wrapper">
+				<div class="column">
+					<div class="use-space"></div>
+					<div class="local-music">
+						<i></i>
+						<span>本地音乐<em class="count">(0)</em></span>
+					</div>
+					<div class="recent-play">
+						<i></i>
+						<span>最近播放<em class="count">(0)</em></span>
+					</div>
+					<div class="download">
+						<i></i>
+						<span>下载管理<em class="count">(0)</em></span>
+					</div>
+					<div class="my-radio">
+						<i></i>
+						<span>我的电台<em class="count">(0)</em></span>
+					</div>
+					<div class="my-collect">
+						<i></i>
+						<span>我的收藏<em class="count">(0)</em></span>
+					</div>
+				</div>
+				<div class="song-sheet">
+					<div class="song-sheet-wrapper">
+						<div class="header" @click="songSheet = !songSheet">
+							<i class="up-icon" :class="songSheet?'':'down-icon'"></i>
+							<span>创建的歌单</span>
+							<i class="config"></i>
+						</div>
+						<div class="content" v-show="songSheet" v-if="!loginUserStatus" @click="toLogin">
+							<div class="song-sheet-item">
+								<div class="cover">
+									<img v-if="!loginUserStatus" src="https://p1.music.126.net/EWC8bPR8WW9KvhaftdmsXQ==/3397490930543093.jpg?param=48y48"
+									 width="48" height="48">
+								</div>
+								<div class="text">
+									<div class="name">我喜欢的音乐</div>
+									<div class="count">0首</div>
+								</div>
+								<div class="btn"></div>
+							</div>
+						</div>
+						<div class="content" v-else v-show="songSheet" v-for="(create,createindex) in createList" :key="createindex"
+						 @click="getSongListDetail({axios:axios,router:$router,listid:create.id,audioType:'music'})">
+							<div class="song-sheet-item">
+								<div class="cover">
+									<img v-show="create!=undefined" :src="create.coverImgUrl+'?param=48y48'" width="48" height="48">
+								</div>
+								<div class="text">
+									<div class="name">{{create.name}}</div>
+									<div class="count">{{create.trackCount}}首</div>
+								</div>
+								<div class="btn"></div>
+							</div>
+						</div>
+
+						<div class="header" v-show="loginUserStatus" @click="collectSheet = !collectSheet">
+							<i class="up-icon" :class="collectSheet?'':'down-icon'"></i>
+							<span>收藏的歌单({{collectList.lenght}})</span>
+							<i class="config"></i>
+						</div>
+						<div class="content" v-show="collectSheet" v-for="(collect,collectindex) in collectList" :key="collectindex+1"
+						 @click="getSongListDetail({axios:axios,router:$router,listid:collect.id,audioType:'music'})">
+							<div class="song-sheet-item">
+								<div class="cover">
+									<img :src="collect.coverImgUrl+'?param=48y48'" width="48" height="48">
+								</div>
+								<div class="text">
+									<div class="name">{{collect.name}}</div>
+									<div class="count">{{collect.trackCount}}首</div>
+								</div>
+								<div class="btn"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="recommand-song-sheet">
+				<div class="line"></div>
+				<div class="recommand-song-sheet-wrapper">
+					<div class="title">推荐歌单</div>
+					<div class="recommand-list">
+						<div class="recommand-item" v-for="(recommd,recommdindex) in recommdSongSheet" :key="recommdindex + 'recommdindex'"
+						 @click="getSongListDetail({axios:axios,router:$router,listid:recommd.id})">
 							<div class="cover">
-								<img src="https://p1.music.126.net/EWC8bPR8WW9KvhaftdmsXQ==/3397490930543093.jpg?param=48y48" width="48" height="48">
+								<img :src="recommd.picUrl" :alt="recommd.copywriter">
 							</div>
-							<div class="text">
-								<div class="name">我喜欢的音乐</div>
-								<div class="count">0首</div>
-							</div>
-							<div class="btn"></div>
+							<div class="name">{{recommd.name}}</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-
-		</div>
-
-		<div class="recommand-song-sheet">
-			<div class="line"></div>
-			<div class="recommand-song-sheet-wrapper">
-				<div class="title">推荐歌单</div>
-				<div class="recommand-list">
-					<div class="recommand-item" v-for="(recommd,recommdindex) in recommdSongSheet" :key="recommdindex + 'recommdindex'">
-						<div class="cover">
-							<img :src="recommd.picUrl" :alt="recommd.copywriter">
-						</div>
-						<div class="name">{{recommd.name}}</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
+		</v-touch>
 	</div>
 </template>
 
 <script>
 	import {
-		mapGetters
+		mapState,
+		mapGetters,
+		mapActions
 	} from 'vuex'
 	export default {
 		name: 'MyMusic',
 		data() {
 			return {
-				songSheet: true
+				songSheet: true,
+				collectSheet: true
 			}
 		},
 		computed: {
-			...mapGetters(['recommdSongSheet'])
+			...mapState(['isAjax']),
+			...mapGetters(['recommdSongSheet', 'loginUserStatus', 'loginCode', 'createList', 'collectList', 'userDetail'])
+
 		},
-		methods:{
-			toLogin(){
+		methods: {
+			...mapActions(['setBottonPlayer', 'getPlaylist', 'getSongListDetail']),
+			toLogin() {
+				this.setBottonPlayer(false)
 				this.$router.push('/account')
+			},
+			swiperleft() {
+				this.$router.push('/discover/stylerecommd')
+			}
+		},
+		mounted() {
+			if (this.loginCode === 200) {
+				this.getPlaylist(this.axios)
 			}
 		}
 	}
@@ -108,12 +165,12 @@
 	@light-theme-font-black: #333;
 
 	.my-music-view {
-		position: relative;
 		width: 100%;
 		padding-bottom: 80px;
 		background: #FFF;
 
 		.bg {
+			margin-top: -1px;
 			height: 26px;
 			width: 100%;
 			background: @light-theme-bg;
@@ -122,7 +179,7 @@
 		//未登录
 		.unlogin-wrapper {
 			position: absolute;
-			top: 0;
+			top: 56px;
 			left: 0;
 			width: 100%;
 
@@ -167,7 +224,7 @@
 
 		//各栏目
 		.my-music-wrapper {
-			margin-top: 30px;
+			// margin-top: 30px;
 			width: 100%;
 			background: #fff;
 
@@ -197,6 +254,10 @@
 							color: #a6a6a6;
 						}
 					}
+				}
+
+				.use-space {
+					height: 30px
 				}
 
 				.local-music {
@@ -279,6 +340,7 @@
 
 					.content {
 						.song-sheet-item {
+							padding-top: 3px;
 							height: 50px;
 							display: flex;
 
@@ -299,8 +361,9 @@
 								.name {
 									height: 30px;
 									line-height: 30px;
-									font-size: 15px;
+									font-size: 13px;
 									color: #000;
+									overflow: hidden;
 								}
 
 								.count {

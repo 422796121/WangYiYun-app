@@ -14,7 +14,7 @@
 				<div class="btn">
 					<mu-button round small @click="toLoginOrRegister('register')">注册</mu-button>
 				</div>
-				<div class="no-login">
+				<div class="no-login" @click="vistorToIndex()">
 					<span>游客试用</span>
 				</div>
 			</div>
@@ -54,10 +54,22 @@
 	export default {
 		name: 'AccountView',
 		methods: {
-			...mapActions(['setBottonPlayer']),
-			toLoginOrRegister(type){
-				
-				this.$router.push({name:'accounttype',params:{type:type}})
+			...mapActions(['setBottonPlayer', 'changePageType']),
+			vistorToIndex(type) {
+				this.setBottonPlayer(true)
+				this.$router.push('/discover/stylerecommd')
+			},
+			toLoginOrRegister(type) {
+				this.changePageType(type)
+				this.$router.push({
+					name: 'accounttype',
+					params: {
+						type: type
+					}
+				})
+			},
+			clear() {
+
 			}
 		},
 		mounted() {
@@ -66,7 +78,7 @@
 			})
 		},
 		beforeRouteLeave(to, from, next) {
-			this.setBottonPlayer(true)
+			// this.setBottonPlayer(true)
 			next()
 		}
 	}
@@ -119,14 +131,16 @@
 						box-shadow: none;
 						color: @light-theme-bg;
 						border: 1px solid @light-theme-bg;
-						background: rgba(255,255,255,.9);
+						background: rgba(255, 255, 255, .9);
 					}
 				}
-				.no-login{
+
+				.no-login {
 					height: 35px;
 					line-height: 35px;
 					text-align: center;
-					&>span{
+
+					&>span {
 						text-decoration: underline;
 						color: #595959;
 						font-size: 13px;
@@ -147,13 +161,15 @@
 					line-height: 48px;
 					text-align: center;
 					font-size: 13px;
-					color: rgba(0,0,0,0.8);
-					.left-line,.right-line{
+					color: rgba(0, 0, 0, 0.8);
+
+					.left-line,
+					.right-line {
 						margin-top: 23px;
 						flex: 1;
 						height: 1px;
 					}
-					
+
 					.left-line {
 						background: -webkit-gradient(linear, 0 0, 100% 0, from(#d9d9d9), to(#fafafa));
 						background: -webkit-linear-gradient(to left, #d9d9d9, #fafafa);
@@ -174,54 +190,61 @@
 						background: linear-gradient(to right, #d9d9d9, #fafafa);
 					}
 				}
-			
-				.else-login{
+
+				.else-login {
 					margin: 0 auto;
 					display: flex;
 					width: 90%;
-					&>div{
+
+					&>div {
 						flex: 1;
 						width: 60px;
 						text-align: center;
-						.name{
+
+						.name {
 							padding: 6px 0;
 							font-size: 10px;
 							color: #a6a6a6;
 						}
-						.icon{
+
+						.icon {
 							margin: 0 auto;
 							height: 40px;
 							width: 40px;
 						}
 					}
-					.wechat{
-						.icon{
+
+					.wechat {
+						.icon {
 							background: url(../../public/images/login_wechat_icon.png) center center no-repeat;
 							background-size: 40px;
 						}
 					}
-					.qq{
-						.icon{
+
+					.qq {
+						.icon {
 							background: url(../../public/images/login_qq_icon.png) center center no-repeat;
 							background-size: 40px;
 						}
 					}
-					.weibo{
-						.icon{
+
+					.weibo {
+						.icon {
 							background: url(../../public/images/login_weibo_icon.png) center center no-repeat;
 							background-size: 40px;
 						}
 					}
-					.wangyi{
-						.icon{
+
+					.wangyi {
+						.icon {
 							background: url(../../public/images/login_yi_icon.png) center center no-repeat;
 							background-size: 40px;
 						}
 					}
-					
-					
+
+
 				}
-			
+
 			}
 
 		}

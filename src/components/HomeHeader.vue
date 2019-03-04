@@ -2,7 +2,7 @@
 	<div class="discovery-header">
 		<div class="discovery-wrapper">
 			<mu-appbar color='#d23023'>
-				<mu-button icon slot="left" @click="setLfetOpen">
+				<mu-button icon slot="left" @click="setLeftOpen">
 					<mu-icon value="menu"></mu-icon>
 				</mu-button>
 				<div class="header-btn">
@@ -38,7 +38,7 @@
 			...mapState(['leftOpen'])
 		},
 		methods: {
-			...mapActions(['setLfetOpen'])
+			...mapActions(['setLeftOpen'])
 		}
 	}
 </script>

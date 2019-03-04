@@ -2,102 +2,107 @@
 	<div class="style-recommend-radio-view">
 		<div class="bg"></div>
 		<carousel></carousel>
-		<div class="btn-wrapper">
-			<div class="btn-box">
-				<mu-avatar :size="45">
-					<img src="../../../public/images/dragonball_radio_calss.png">
-				</mu-avatar>
-				<span>电台分类</span>
+		<v-touch v-on:swipeleft="swiperleft" v-on:swiperight="swiperright">
+			<div class="btn-wrapper">
+				<div class="btn-box">
+					<mu-avatar :size="45">
+						<img src="../../../public/images/dragonball_radio_calss.png">
+					</mu-avatar>
+					<span>电台分类</span>
+				</div>
+				<div class="btn-box">
+					<mu-avatar :size="45">
+						<img src="../../../public/images/dragonball_radio_rank.png">
+					</mu-avatar>
+					<span>电台排行</span>
+				</div>
+				<div class="btn-box">
+					<mu-avatar :size="45">
+						<img src="../../../public/images/dragonball_radio_vip.png">
+					</mu-avatar>
+					<span>付费专区</span>
+				</div>
 			</div>
-			<div class="btn-box">
-				<mu-avatar :size="45">
-					<img src="../../../public/images/dragonball_radio_rank.png">
-				</mu-avatar>
-				<span>电台排行</span>
-			</div>
-			<div class="btn-box">
-				<mu-avatar :size="45">
-					<img src="../../../public/images/dragonball_radio_vip.png">
-				</mu-avatar>
-				<span>付费专区</span>
-			</div>
-		</div>
 
-		<div class="recommend-list">
-			<div class="name">
-				<span>今日优选<i class="right-icon"></i></span>
-			</div>
-			<div class="content">
-				<div class="content-item" v-for="(recommdRadio,recommdRadioindex) in recommdRadioList" :key="recommdRadioindex + 'recommdRadioindex'">
-					<div class="content-img">
-						<img :src="recommdRadio.picUrl" :alt="recommdRadio.copywriter">
-					</div>
-					<div class="content-text">
-						<div class="title">{{recommdRadio.name}}</div>
-						<div class="program">听众: {{recommdRadio.subCount}}</div>
-						<div class="desc">{{recommdRadio.rcmdtext}}</div>
+			<div class="recommend-list">
+				<div class="name">
+					<span>今日优选</span>
+				</div>
+				<div class="content">
+					<div class="content-item" v-for="(recommdRadio,recommdRadioindex) in recommdRadioList" :key="recommdRadioindex + 'recommdRadioindex'"
+					 @click="toRadioList({axios:axios,router:$router,id:recommdRadio.id,thisraido:recommdRadio,audioType:'radio'})">
+						<div class="content-img">
+							<img :src="recommdRadio.picUrl" :alt="recommdRadio.copywriter">
+						</div>
+						<div class="content-text">
+							<div class="title">{{recommdRadio.name}}</div>
+							<div class="program">听众: {{recommdRadio.subCount}}</div>
+							<div class="desc">{{recommdRadio.rcmdtext}}</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="radio-list">
-			<div class="name">
-				<span>创作|翻唱<i class="right-icon"></i></span>
-			</div>
-			<div class="content">
-				<div class="content-item" v-for="(create,createindex) in createRadioList" :key="createindex + 'createindex'">
-					<div class="content-img">
-						<img :src="create.picUrl" :alt="create.copywriter">
+			<div class="radio-list">
+				<div class="name">
+					<span>创作|翻唱<i class="right-icon"></i></span>
+				</div>
+				<div class="content">
+					<div class="content-item" v-for="(create,createindex) in createRadioList" :key="createindex + 'createindex'"
+					 @click="toRadioList({axios:axios,router:$router,id:create.id,thisraido:create,audioType:'radio'})">
+						<div class="content-img">
+							<img :src="create.picUrl" :alt="create.copywriter">
+						</div>
+						<span class="title">{{create.name}}</span>
 					</div>
-					<span class="title">{{create.name}}</span>
 				</div>
 			</div>
-		</div>
 
-		<div class="radio-list">
-			<div class="name">
-				<span>3D电音<i class="right-icon"></i></span>
-			</div>
-			<div class="content">
-				<div class="content-item" v-for="(threed,threedindex) in threedRadioList" :key="threedindex + 'threedindex'">
-					<div class="content-img">
-						<img :src="threed.picUrl" :alt="threed.copywriter">
+			<div class="radio-list">
+				<div class="name">
+					<span>3D电音<i class="right-icon"></i></span>
+				</div>
+				<div class="content">
+					<div class="content-item" v-for="(threed,threedindex) in threedRadioList" :key="threedindex + 'threedindex'"
+					 @click="toRadioList({axios:axios,router:$router,id:threed.id,thisraido:threed,audioType:'radio'})">
+						<div class="content-img">
+							<img :src="threed.picUrl" :alt="threed.copywriter">
+						</div>
+						<span class="title">{{threed.name}}</span>
 					</div>
-					<span class="title">{{threed.name}}</span>
 				</div>
 			</div>
-		</div>
 
-		<div class="radio-list">
-			<div class="name">
-				<span>情感调频<i class="right-icon"></i></span>
-			</div>
-			<div class="content">
-				<div class="content-item" v-for="(feel,feelindex) in feelRadioList" :key="feelindex + 'feelindex'">
-					<div class="content-img">
-						<img :src="feel.picUrl" :alt="feel.copywriter">
+			<div class="radio-list">
+				<div class="name">
+					<span>情感调频<i class="right-icon"></i></span>
+				</div>
+				<div class="content">
+					<div class="content-item" v-for="(feel,feelindex) in feelRadioList" :key="feelindex + 'feelindex'" @click="toRadioList({axios:axios,router:$router,id:feel.id,thisraido:feel,audioType:'radio'})">
+						<div class="content-img">
+							<img :src="feel.picUrl" :alt="feel.copywriter">
+						</div>
+						<span class="title">{{feel.name}}</span>
 					</div>
-					<span class="title">{{feel.name}}</span>
 				</div>
 			</div>
-		</div>
 
-		<div class="radio-list">
-			<div class="name">
-				<span>音乐故事<i class="right-icon"></i></span>
-			</div>
-			<div class="content">
-				<div class="content-item" v-for="(story,storyindex) in storyRadioList" :key="storyindex + 'storyindex'">
-					<div class="content-img">
-						<img :src="story.picUrl" :alt="story.copywriter">
+			<div class="radio-list">
+				<div class="name">
+					<span>音乐故事<i class="right-icon"></i></span>
+				</div>
+				<div class="content">
+					<div class="content-item" v-for="(story,storyindex) in storyRadioList" :key="storyindex + 'storyindex'" @click="toRadioList({axios:axios,router:$router,id:story.id,thisraido:story,audioType:'radio'})">
+						<div class="content-img">
+							<img :src="story.picUrl" :alt="story.copywriter">
+						</div>
+						<span class="title">{{story.name}}</span>
 					</div>
-					<span class="title">{{story.name}}</span>
 				</div>
 			</div>
-		</div>
 
-		<radio-classify></radio-classify>
+			<radio-classify></radio-classify>
+		</v-touch>
 	</div>
 </template>
 
@@ -127,7 +132,13 @@
 			})
 		},
 		methods: {
-			...mapActions(['setLfetOpen', 'getRadioData'])
+			...mapActions(['setLfetOpen', 'getRadioData', 'toRadioList']),
+			swiperleft() {
+				this.$router.push('/videoview')
+			},
+			swiperright() {
+				this.$router.push('/discover/friends')
+			}
 		},
 		created() {
 			this.$nextTick(() => {

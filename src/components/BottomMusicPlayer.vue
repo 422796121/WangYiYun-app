@@ -1,18 +1,20 @@
 <template>
-	<div class="bottom-music-player">
-		<audio src="https://music.163.com/song/media/outer/url?id=556042458.mp3" ref="player"></audio>
+	<div class="bottom-music-player" @click="showSongView">
+		<audio src="" ref="player" @ended="changeSong(1,true)"></audio>
 		<div class="time-progress">
-			<div class="time" ref="timeShow"></div>
+			<div class="time" ref="timeShow" :style="`width:${timePercent}%`"></div>
 		</div>
 		<div class="music-player-wrapper">
 			<div class="player-img">
-				<img src="https://p2.music.126.net/QHw-RuMwfQkmgtiyRpGs0Q==/102254581395219.jpg" alt="">
+				<img :src="playImfo.img" alt="" width="38" height="38">
 			</div>
-			<div class="content">
-				<div class="title">{{currentTime}}</div>
-				<div class="author" v-if="lyric==null">asd</div>
-				<div class="lyric" v-else>{{lyric}}</div>
-			</div>
+			<v-touch v-on:swipeleft="swiperleft" v-on:swiperight="swiperright" :swipe-options="{direction: 'horizontal'}" style="width:100%;">
+				<div class="content">
+					<div class="title">{{playImfo.name}}</div>
+					<div class="author" v-if="lyric==null">{{playImfo.author}}</div>
+					<div class="lyric" v-else>{{lyric}}</div>
+				</div>
+			</v-touch>
 			<div class="btn-box">
 				<span class="play-btn" :class="playState ? 'hasplay' : ''" @click="playMusic"></span>
 				<span class="like-btn haslike"></span>
@@ -33,30 +35,44 @@
 			return {}
 		},
 		computed: {
-			...mapState(['isAjax']),
-			...mapGetters(['playState', 'lyric', 'currentTime'])
-		},
-		created() {
-			this.$nextTick(() => {
-				let player = this.$refs.player
-				this.getPlayerData({
-					ele: player,
-					axios: this.axios,
-					musicid: '556042458'
-				})
-			})
-
+			...mapGetters(['playState', 'lyric', 'currentTime', 'playImfo', 'timePercent'])
 		},
 		methods: {
-			...mapActions(['getPlayerData', 'setMusicPlayer']),
-			playMusic() {
+			...mapActions(['getPlayerData', 'setMusicPlayer', 'saveMusicPlayerTool', 'setMusicPlayerStatus', 'changePlayerSong','showSongView']),
+			playMusic(event) {
+				event.stopPropagation()
 				let player = this.$refs.player
 				let show = this.$refs.timeShow
+				this.setMusicPlayerStatus()
 				this.setMusicPlayer({
+					player,
+					show,
+					conti: true
+				})
+			},
+			swiperleft() {
+				this.changeSong(1)
+			},
+			swiperright() {
+				this.changeSong(-1)
+			},
+			changeSong(num,isEnd) {
+				this.changePlayerSong({
+					axios: this.axios,
+					num,
+					isEnd
+				})
+			}
+		},
+		mounted() {
+			this.$nextTick(() => {
+				let player = this.$refs.player
+				let show = this.$refs.timeShow
+				this.saveMusicPlayerTool({
 					player,
 					show
 				})
-			}
+			})
 		}
 	}
 </script>
@@ -69,7 +85,7 @@
 		right: 0;
 		height: 44px;
 		width: 100%;
-		z-index: 999;
+		z-index: 990;
 		background: rgba(255, 255, 255, .9);
 
 		.time-progress {
@@ -88,6 +104,7 @@
 			display: flex;
 
 			.player-img {
+				margin-right: 5px;
 				flex: 0 0 42px;
 				height: 42px;
 
@@ -108,10 +125,12 @@
 					font-size: 14px;
 					color: #000;
 					font-weight: 500;
+					white-space: nowrap;
 				}
 
 				.author,
 				.lyric {
+					padding-left: 1px;
 					height: 17px;
 					line-height: 17px;
 					font-size: 12px;
@@ -121,6 +140,7 @@
 			.btn-box {
 				flex: 0 0 84px;
 				height: 84px;
+				z-index: 991;
 
 				&>span {
 					display: inline-block;

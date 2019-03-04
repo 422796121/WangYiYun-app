@@ -51,6 +51,13 @@ $  npm install vue-touch @ next --save
 
 
 
+### 安装vue-cookie
+
+```
+$  npm install vue-cookies --save
+```
+
+
 ## Project setup
 
 ```

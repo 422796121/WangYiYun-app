@@ -6,7 +6,8 @@
 				<router-view />
 			</keep-alive>
 			<!-- <div class="set-space"></div> -->
-			<bottom-music-player v-show="showBottomPlayer"></bottom-music-player>
+			<bottom-music-player v-show="showBottomPlayer&&!defaultPlay"></bottom-music-player>
+			<music-player v-show="showSongDetail"></music-player>
 			<set-drawer></set-drawer>
 		</div>
 	</div>
@@ -15,6 +16,7 @@
 	import Loading from './views/Loading.vue'
 	import SetDrawer from './components/SetDrawer.vue'
 	import BottomMusicPlayer from './components/BottomMusicPlayer.vue'
+	import MusicPlayer from './components/MusicPlayer.vue'
 	import {
 		mapState,
 		mapGetters,
@@ -25,16 +27,18 @@
 		components: {
 			Loading,
 			SetDrawer,
-			BottomMusicPlayer
+			BottomMusicPlayer,
+			MusicPlayer
 		},
 		computed: {
-			...mapState(['isLoading', 'isAjax', 'showBottomPlayer']),
+			...mapState(['isLoading', 'isAjax', 'showBottomPlayer', 'showSongDetail']),
 			...mapGetters({
-				recommdList: 'recommdList'
+				recommdList: 'recommdList',
+				defaultPlay: 'defaultPlay'
 			})
 		},
 		methods: {
-			...mapActions(['getDiscoveryData'])
+			...mapActions(['getDiscoveryData', 'getSongDetail'])
 		}
 	}
 </script>

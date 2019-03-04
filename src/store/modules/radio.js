@@ -9,7 +9,9 @@ const state = {
 		feelRadioList: [], // 情感调频
 		storyRadioList: [], // 音乐故事
 	},
-	classifyRadioList: [] // 电台分类
+	classifyRadioList: [], // 电台分类
+	thisraido: {}, // 当前电台
+	raidoList: {} // 电台节目列表
 }
 
 const getters = {
@@ -80,7 +82,12 @@ const getters = {
 		} else {
 			return null
 		}
-	}
+	},
+	// 当前电台
+	thisraido: state => state.thisraido,
+	// 电台节目列表
+	raidoList: state => state.raidoList.programs
+	
 }
 
 const mutations = {
@@ -107,7 +114,16 @@ const mutations = {
 	//音乐故事
 	[types.GET_STORY_RADIO_LIST](state, data) {
 		state.radioData.storyRadioList = data
+	},
+	//电台节目列表
+	[types.GET_RADIO_LIST_DETAIL](state, {
+		thisraido,
+		data
+	}) {
+		state.raidoList = data
+		state.thisraido = thisraido
 	}
+
 }
 
 const actions = {
@@ -227,8 +243,69 @@ const actions = {
 					resolve()
 				})
 		})
+	},
+	// 电台节目列表  电台id 单页条数
+	toRadioList({
+		commit
+	}, {
+		axios,
+		router,
+		id,
+		thisraido,
+		audioType
+	}) {
+		commit(types.CHANGE_PLAYER_TYPE, audioType)
+		if (id === null) {
+			router.push('/songlistview')
+		} else {
+			let timestamp = new Date().getTime()
+			return new Promise(resolve => {
+				axios.get('/api/raidolistdetail', {
+						params: {
+							id,
+							limit: 30,
+							timestamp
+						}
+					})
+					.then(res => {
+						let data = JSON.parse(res.data.data)
+						commit('GET_RADIO_LIST_DETAIL', {
+							thisraido,
+							data
+						})
+						resolve()
+						router.push('/songlistview')
+					})
+			})
+		}
+	},
+	//电台详情 节目id
+	getRadioDetail({
+		commit
+	}, {
+		axios,
+		musicId,
+		num
+	}) {
+		let timestamp = new Date().getTime()
+		return new Promise(resolve => {
+			axios.get('/api/radiodetail', {
+					params: {
+						musicId,
+						timestamp
+					}
+				})
+				.then(res => {
+					let data = JSON.parse(res.data.data)
+					commit(types.GET_SONG_DETAIL, {
+						data,
+						num
+					})
+					this.dispatch('setBottonPlayer', true)
+					resolve()
+				})
+		})
 	}
-
 
 }
 

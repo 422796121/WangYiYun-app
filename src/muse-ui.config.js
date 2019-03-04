@@ -14,10 +14,15 @@ import {
 	Helpers, //工具
 	Icon, //图标
 	List, //列表
-	Progress //进度条
+	LoadMore, //加载更多
+	Progress, //进度条
+	Slider, //滑块
+	Tooltip //提示框
 } from 'muse-ui'
 
-const muses = [AppBar, Avatar, Badge, Button, BottomNav, Drawer, ExpansionPanel, Helpers, Icon, List, Progress]
+const muses = [AppBar, Avatar, Badge, Button, BottomNav, Drawer, ExpansionPanel, Helpers, Icon, List, LoadMore,
+	Progress, Slider, Tooltip
+]
 
 export default {
 	install(Vue) {
