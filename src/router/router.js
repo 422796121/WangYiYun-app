@@ -33,16 +33,6 @@ export default new Router({
 					name: 'stylerecommd',
 					component: () => import('../views/DiscoveryMusic/StyleRecommend.vue')
 				},
-				{
-					path: 'songsheet',
-					name: 'songsheet',
-					component: () => import('../views/DiscoveryMusic/SongSheet.vue')
-				},
-				{
-					path: 'anchorstation',
-					name: 'anchorstation',
-					component: () => import('../views/DiscoveryMusic/AnchorStation.vue')
-				},
 				// 排行
 // 				{
 // 					path: 'rankings',

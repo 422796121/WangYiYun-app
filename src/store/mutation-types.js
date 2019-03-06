@@ -64,3 +64,4 @@ export const CHANGE_PLAY_TIME = 'CHANGE_PLAY_TIME' //改变播放时间
 export const CHANGE_PLAYER_TYPE = 'CHANGE_PLAYER_TYPE' //改变播放类型
 export const GET_VIDEO_URL_LIST = 'GET_VIDEO_URL_LIST' //视频链接
 export const GET_MV_DETAIL = 'GET_MV_DETAIL' //mv详情
+export const GET_SIMI_MV = 'GET_SIMI_MV' //相似mv

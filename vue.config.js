@@ -101,7 +101,7 @@ module.exports = {
 						})
 				}),
 				//歌单详情
-				app.get('/api/songlistdetail',(req,res)=>{
+				app.get('/api/songlistdetail', (req, res) => {
 					let id = req.query.listid
 					let timestamp = req.query.timestamp
 					ajax.get(`http://localhost:3000/playlist/detail?id=${id}&timestamp=${timestamp}`)
@@ -114,8 +114,8 @@ module.exports = {
 							})
 						})
 				})
-				//朋友动态
-				app.get('/api/friendevent', (req, res) => {
+			//朋友动态
+			app.get('/api/friendevent', (req, res) => {
 					ajax.get('http://localhost:3000/event')
 						.set({
 							'Access-Control-Allow-Origin': '*',
@@ -253,7 +253,23 @@ module.exports = {
 							})
 						})
 				}),
-				
+				// 相似mv
+				app.get('/api/simimv', (req, res) => {
+					var mvid = req.query.id
+					ajax.post('http://localhost:3000/simi/mv')
+						.send({
+							mvid
+						})
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								data: data.text
+							})
+						})
+				}),
+
 				//电台
 				//电台分类
 				app.get('/api/typeradio', (req, res) => {
@@ -294,7 +310,7 @@ module.exports = {
 						})
 				}),
 				//电台节目列表 电台id 单页条数
-				app.get('/api/raidolistdetail',(req,res)=>{
+				app.get('/api/raidolistdetail', (req, res) => {
 					let id = req.query.id
 					let timestamp = req.query.timestamp
 					let limit = req.query.limit
@@ -309,8 +325,8 @@ module.exports = {
 						})
 				})
 
-				//歌词
-				app.get('/api/lyric', (req, res) => {
+			//歌词
+			app.get('/api/lyric', (req, res) => {
 					let id = req.query.musicid
 					ajax.post('http://localhost:3000/lyric')
 						.send({
@@ -362,10 +378,10 @@ module.exports = {
 					let order = req.query.order
 					let timestamp = req.query.timestamp
 					ajax.get(`http://localhost:3000/top/playlist?limit=${limit}&order=${order}&timestamp=${timestamp}`)
-// 						.send({
-// 							limit,
-// 							order
-// 						})
+						// 						.send({
+						// 							limit,
+						// 							order
+						// 						})
 						.end((err, data) => {
 							if (err) {
 								console.log('[Error]:' + err)

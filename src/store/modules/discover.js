@@ -21,8 +21,8 @@ const state = {
 		goodListOrder: 'new', //精品歌单排序
 		newMVList: {}, //最新MV
 		mvUrl: {}, // MV链接
-		playMV: {} // 播放的MV
-
+		playMV: {}, // 播放的MV
+		simiMV: [] //相似MV
 	}
 }
 
@@ -84,9 +84,13 @@ const getters = {
 		obj['img'] = state.discoverData.playMV.cover
 		obj['count'] = state.discoverData.playMV.playCount
 		obj['time'] = state.discoverData.playMV.publishTime
+		obj['likeCount'] = state.discoverData.playMV.likeCount
+		obj['subCount'] = state.discoverData.playMV.subCount
+		obj['commentCount'] = state.discoverData.playMV.commentCount
+		obj['shareCount'] = state.discoverData.playMV.shareCount
 		return obj
-	}	
-
+	},
+	simiMV: state => state.discoverData.simiMV.mvs
 }
 
 const mutations = {
@@ -150,6 +154,10 @@ const mutations = {
 	//mv详情
 	[types.GET_MV_DETAIL](state, data) {
 		state.discoverData.playMV = data.data
+	},
+	//相似mv
+	[types.GET_SIMI_MV](state, data) {
+		state.discoverData.simiMV = data
 	}
 }
 
@@ -336,6 +344,7 @@ const actions = {
 	}, {
 		axios
 	}) {
+		commit(types.REFRESH_AJAX, true)
 		commit(types.CHANGE_LOAD_MORE_STATUS, true)
 		let limit = state.songListPage
 		let timestamp = new Date().getTime()
@@ -352,6 +361,7 @@ const actions = {
 					commit(types.CHANGE_NEW_VIDEO_PAGE)
 					resolve()
 					commit(types.CHANGE_LOAD_MORE_STATUS, false)
+					commit(types.REFRESH_AJAX, false)
 				})
 		})
 	},
@@ -360,10 +370,8 @@ const actions = {
 		commit
 	}, {
 		axios,
-		router,
 		id
 	}) {
-		console.log('0')
 		let timestamp = new Date().getTime()
 		return new Promise(resolve => {
 			axios.get('/api/videourl', {
@@ -384,10 +392,8 @@ const actions = {
 		commit
 	}, {
 		axios,
-		router,
 		id
 	}) {
-		console.log('1')
 		let timestamp = new Date().getTime()
 		return new Promise(resolve => {
 			axios.get('/api/mvdetail', {
@@ -403,6 +409,26 @@ const actions = {
 				})
 		})
 	},
+	 //相似mv
+	getSimiMv({
+		commit
+	}, {
+		axios,
+		id
+	}) {
+		return new Promise(resolve => {
+			axios.get('/api/simimv', {
+					params: {
+						id
+					}
+				})
+				.then(res => {
+					let data = JSON.parse(res.data.data)
+					commit(types.GET_SIMI_MV, data)
+					resolve()
+				})
+		})
+	},
 	//视频显示
 	async showVideo({
 		commit
@@ -411,6 +437,7 @@ const actions = {
 		router,
 		id
 	}) {
+		router.push('/videoplayview/' + id)
 		commit(types.REFRESH_AJAX, true)
 		await this.dispatch('getVideoURL', {
 			axios,
@@ -420,8 +447,11 @@ const actions = {
 			axios,
 			id
 		})
+		await this.dispatch('getSimiMv', {
+			axios,
+			id
+		})
 		commit(types.REFRESH_AJAX, false)
-		router.push('/videoplayview/' + id)
 	}
 }
 
