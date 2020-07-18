@@ -1,6 +1,6 @@
 # 自制网易云音乐APP
 
-## 开发环境
+## 项目从头搭建
 
 ### 创建vue cli 3.0项目
 ```
@@ -58,31 +58,18 @@ $  npm install vue-cookies --save
 ```
 
 
-## Project setup
+## 项目运行环境
 
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 项目运行
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 项目打包
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
