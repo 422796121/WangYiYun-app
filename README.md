@@ -1,5 +1,7 @@
 # 自制网易云音乐APP
 
+配合NeteaseCloudMusicApi-master接口使用
+
 ## 项目从头搭建
 
 ### 创建vue cli 3.0项目
