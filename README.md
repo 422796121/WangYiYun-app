@@ -61,15 +61,15 @@ $  npm install vue-cookies --save
 ## 项目运行环境
 
 ```
-npm install
+$  npm install
 ```
 
 ### 项目运行
 ```
-npm run serve
+$  npm run serve
 ```
 
 ### 项目打包
 ```
-npm run build
+$  npm run build
 ```
